@@ -5,13 +5,19 @@
   "scripts": {
     "astro": "astro",
     "build": "astro build",
+    "build:tauri": "tauri build",
     "commit": "cz",
     "dev": "astro dev",
+    "dev:desktop": "tauri dev",
+    "dev:android": "tauri android dev",
+    "dev:ios": "tauri ios dev",
     "knip": "knip",
     "prepare": "vp config",
     "preview": "astro preview",
+    "preview:android": "tauri android run",
+    "preview:ios": "tauri ios run",
     "security": "socket scan create .",
-    "start": "vpr dev",
+    "tauri": "tauri",
     "update": "taze"
   },
   "dependencies": {
@@ -57,6 +63,7 @@
     "@commitlint/types": "^21.2.3",
     "@iconify-json/material-icon-theme": "^1.2.77",
     "@iconify/json": "^2.2.553",
+    "@tauri-apps/cli": "^2.12.4",
     "commitizen": "^4.3.2",
     "inquirer": "^9.3.8",
     "knip": "^6.44.1",

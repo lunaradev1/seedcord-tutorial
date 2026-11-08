@@ -11,6 +11,7 @@
   h4,
   h5,
   h6 {
+    /*noinspection CssNoGenericFontName*/
     font-family: var(--sl-font-display);
   }
 }

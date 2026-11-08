@@ -27,6 +27,8 @@ import expressiveCodeConfig from './config/expressive-code'
 import giscusConfig from './config/giscus'
 import sidebarConfig from './config/sidebar'
 
+const host = process.env.TAURI_DEV_HOST
+const runningUnderTauri = Boolean(process.env.USING_TAURI)
 const url = 'https://tutorial.seedcord.org'
 
 // https://astro.build/config
@@ -97,9 +99,24 @@ export default defineConfig({
   ],
 
   vite: {
+    build: {
+      // Tauri uses Chromium on Windows and WebKit on macOS and Linux
+      target: process.env.TAURI_ENV_PLATFORM === 'windows' ? 'chrome105' : 'safari13',
+      // don't minify for debug builds
+      minify: !process.env.TAURI_ENV_DEBUG,
+      // produce sourcemaps for debug builds
+      sourcemap: !!process.env.TAURI_ENV_DEBUG,
+    },
+    clearScreen: false, // Don't clear the console on rebuilds, so we can see errors and warnings from Rust.
+    envPrefix: ['VITE_', 'TAURI_ENV_*'],
     plugins: [Icons({ compiler: 'astro' }), MagicRegExpTransformPlugin.vite()],
     server: {
       allowedHosts: ['localhost', '.trycloudflare.com'],
+      host: host ?? false,
+      strictPort: runningUnderTauri, // Tauri expects ONE port, if it's not available, error out. This is important for Tauri's dev server to work properly.
+      watch: {
+        ignored: ['**/src-tauri/**'],
+      },
     },
   },
 })
