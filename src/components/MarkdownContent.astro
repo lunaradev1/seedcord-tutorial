@@ -1,0 +1,14 @@
+---
+import Default from '@astrojs/starlight/components/MarkdownContent.astro'
+import GroupPages from 'starlight-group-pages/components/MarkdownContent.astro'
+import { getCurrentPageOverview } from 'starlight-group-pages/libs/routeData'
+
+const overview = await getCurrentPageOverview(Astro.locals.starlightRoute)
+---
+
+<Default {...Astro.props}>
+    {overview && <h2>In this group...</h2>}
+    <GroupPages {...Astro.props} />
+    {overview && <hr />}
+    <slot />
+</Default>

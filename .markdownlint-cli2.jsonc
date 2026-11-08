@@ -1,0 +1,40 @@
+{
+  "config": {
+    "MD013": {
+      "enabled": true,
+      "heading_line_length": 90,
+      "line_length": 150,
+    },
+    "MD049": {
+      "enabled": true,
+      "style": "underscore",
+    },
+  },
+  "customRules": ["markdownlint-rule-max-one-sentence-per-line", "markdownlint-rule-relative-links"],
+  "globs": ["src/content/**/*.{md,mdx}", "./*.md"],
+  "ignores": [
+    "**/node_modules/",
+    "**/dist/",
+    "**/build/",
+    "**/.agents",
+    "**/.aiassistant",
+    "**/.git",
+    "**/.github",
+    "AGENTS.md",
+  ],
+  "overrides": [
+    {
+      "combine": "merge",
+      "config": {
+        "code-block-style": false,
+        "code-fence-style": false,
+        "line-length": false,
+        "max-one-sentence-per-line": false,
+        "no-inline-html": false,
+        "no-space-in-emphasis": false, // Disabled because of comments in MDX files having emphasis markers.
+        "single-h1": false,
+      },
+      "filter": ["src/content/**/*.mdx"],
+    },
+  ],
+}

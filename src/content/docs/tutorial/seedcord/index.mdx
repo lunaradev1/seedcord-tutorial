@@ -1,0 +1,70 @@
+---
+title: 'Overview'
+description: "Learn how to make a Discord bot that is end-to-end type safe using seedcord!"
+lastUpdated: true
+giscus: false
+route: /tutorial/seedcord
+---
+
+import { CodeWalkthrough } from 'starlight-codeblocks/components'
+
+Welcome to the seedcord tutorial!
+Here you will learn how to create, configure, and make your own Discord bot using seedcord.
+
+You will start from:
+
+<CodeWalkthrough>
+
+```sh label="pnpm" step="Creating your first project..." frame="terminal"
+pnpm create seedcord@latest
+```
+
+```ts title="bot.ts" step="To checking out your scaffolded project..."
+import { Seedcord } from '@seedcord/gateway'
+
+const seedcord = new Seedcord()
+```
+
+```ts title="commands/echo.ts" step="Creating a command..."
+import { BuilderComponent, RegisterCommand } from '@seedcord/gateway'
+
+@RegisterCommand()
+export class EchoCommand extends BuilderComponent<'command'> {
+  constructor() {
+    super('command')
+
+    this.instance.setName('echo').setDescription('The bot will echo your message')
+  }
+}
+```
+
+```bash step="To seeing it right in Discord..." frame="terminal"
+pnpm dev
+```
+
+```ts title="handlers/echo.ts" step="Let's see something cool in action, click next!"
+import { SlashHandler, SlashRoute } from '@seedcord/gateway'
+
+@SlashRoute('ping')
+export class Ping extends SlashHandler<'ping'> {
+  public async execute(): Promise<void> {
+    await this.reply('Pong!')
+  }
+}
+```
+
+```ts title="commands/echo.ts" step="A type error from a mistyped route!"
+import { SlashHandler, SlashRoute } from '@seedcord/gateway'
+
+// [!error /png/] Argument of type '"png"' is not assignable to parameter of type '"ping"'.
+@SlashRoute('png') // [!code error] Invalid route, should be 'ping'
+export class Ping extends SlashHandler<'ping'> {
+  public async execute(): Promise<void> {
+    await this.reply('Pong!')
+  }
+}
+```
+
+</CodeWalkthrough>
+
+Sound good? Let's get started then!

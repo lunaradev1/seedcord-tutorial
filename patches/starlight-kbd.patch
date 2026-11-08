@@ -1,0 +1,15 @@
+diff --git a/package.json b/package.json
+index 2d50c5b7a7257d0603d3dd73927c7b29bf67bd0a..e440c807b0919225b9771f9eaf086275dfd28653 100644
+--- a/package.json
++++ b/package.json
+@@ -8,8 +8,8 @@
+   "exports": {
+     ".": "./index.ts",
+     "./components": "./user-components/index.ts",
+-    "./components/KbdProvider.astro": "./components/starlight/KbdProvider.astro",
+-    "./components/KbdPicker.astro": "./components/starlight/KbdPicker.astro",
++    "./components/KbdProvider.astro": "./components/KbdProvider.astro",
++    "./components/KbdPicker.astro": "./components/KbdPicker.astro",
+     "./overrides/ThemeSelect.astro": "./overrides/ThemeSelect.astro",
+     "./overrides/ThemeProvider.astro": "./overrides/ThemeProvider.astro",
+     "./package.json": "./package.json"

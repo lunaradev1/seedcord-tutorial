@@ -1,0 +1,13 @@
+diff --git a/components/CreditReferenceCard.astro b/components/CreditReferenceCard.astro
+index 6b2cd12180dd78c8b7971168c076e44873ef8168..12991d4f65dd874f9d128bdb963389673faf68aa 100644
+--- a/components/CreditReferenceCard.astro
++++ b/components/CreditReferenceCard.astro
+@@ -16,7 +16,7 @@ const image = getCreditImage();
+   class:list={["not-content", "starlight-cooler-credit-aside", className]}
+   {...attrs}
+ >
+-  <a href={credit.href}>
++  <a href={credit.href} target="_blank" rel="noopener noreferrer">
+     <h2>{credit.title}</h2>
+     <div>
+       <div>{credit.description && <p>{credit.description}</p>}</div>

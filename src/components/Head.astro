@@ -1,0 +1,12 @@
+---
+import Default from '@astrojs/starlight/components/Head.astro'
+import { toComponentEmbedScript } from 'discord-component-embed'
+import { buildTutorialCard } from '../cards/buildTutorialCard'
+
+// @ts-expect-error This exists, but TypeScript doesn't know about it yet.
+import { pwaInfo } from 'virtual:pwa-info';
+---
+
+<Default {...Astro.props} />
+<Fragment set:html={toComponentEmbedScript(buildTutorialCard(Astro.locals.starlightRoute, Astro.url.origin))} />
+{pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}

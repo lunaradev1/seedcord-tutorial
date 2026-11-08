@@ -1,0 +1,164 @@
+---
+title: 'Introduction to seedcord'
+description: "What is seedcord? Why should I use it? We'll answer those here."
+embedDescription: "Learn what seedcord is, why you should use it, and what the prerequisites are for this tutorial."
+lastUpdated: true
+route: /tutorial/seedcord/introduction
+---
+
+import { Scrollycoding, Step } from 'starlight-codeblocks/components'
+import { Quiz, QuizIntro, QuizResults } from 'starlight-quiz/components'
+
+Now that you're introduced to this tutorial, let's start it off by answering one simple question: "What is seedcord?"
+
+## What is seedcord?
+
+[Seedcord](https://seedcord.org) (stylized as seedcord) is a Discord framework developed by [materwelon](https://github.com/materwelonDhruv), built to be type-safe across boundaries. An invalid handler route will throw at compile-time (thanks to TypeScript's static type checking) rather than at runtime when the code is actually being interpreted. You can also utilize [Vite](https://vite.dev) plugins (explained later), deploy your bot to the edge (like on [Cloudflare](https://cloudflare.com)), use it like a package (with full type safety!), and enjoy having a fully type-safe bot from end-to-end!
+
+## Why use seedcord?
+
+Most Discord frameworks are type-safe, but the type safety ends when you cross boundaries. For example, Sapphire doesn't really stay type-safe if you decide to separate your logic out of the classes. Plus, you'd have to register the command manually, losing valuable time you could've spent on debugging the logic. Let's see that in an example.
+
+<Scrollycoding>
+
+```typescript title="commands/ping.ts" showLineNumbers id="sapphire-ping-command"
+import { ApplyOptions } from '@sapphire/decorators'
+import { Command } from '@sapphire/framework'
+import { MyCommandLogic } from '~/some/other/path'
+
+@ApplyOptions<Command.Options>({})
+export class PingCommand extends Command {
+    public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+        const someOption = interaction.options.getString('some-option')
+
+        await new MyCommandLogic().run(interaction)
+    }
+
+    public override registerApplicationCommands(registry: Command.Registry) {
+        registry.registerChatInputCommand((builder) =>
+            builder
+                .setName('ping')
+                .setDescription('Check if the bot is alive')
+        )
+    }
+}
+```
+
+<Step focus="8" mark="8">This option could be undefined, but you won't know until you run the bot.</Step>
+<Step focus="3,10" mark="3,10">The types here have to match up, even if you change something here.</Step>
+<Step focus="13-19" mark="13-19">You have to register the command manually, which is a pain and can be error-prone.</Step>
+<Step mark="1-20">This file will compile successfully given that `~/some/other/path` exists, but if one of them has a runtime error, you won't know until you run the bot.</Step>
+
+```typescript title="commands/ping.ts" showLineNumbers id="sapphire-ping-command-updated"
+import { ApplyOptions } from '@sapphire/decorators'
+import { Command } from '@sapphire/framework'
+import { MyCommandLogic } from '~/some/other/path'
+
+@ApplyOptions<Command.Options>({})
+export class PingCommand extends Command {
+    public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+        const someOption = interaction.options.getString('some-option')
+
+        // Gotta restart the bot after this gets added!
+        const anotherOption = interaction.options.getString('another-option')
+
+        await new MyCommandLogic().run(interaction)
+    }
+
+    public override registerApplicationCommands(registry: Command.Registry) {
+        registry.registerChatInputCommand((builder) =>
+            builder
+                .setName('ping')
+                .setDescription('Check if the bot is alive')
+        )
+    }
+}
+```
+
+<Step mark="10-11">On top of that, for every change you make, you'll have to restart your bot completely to see the changes, costing even more valuable time (and potentially getting you rate limited by Discord if you keep restarting for every development change).</Step>
+</Scrollycoding>
+
+**You'll see how seedcord gets around those problems _(and probably others!)_ as you read.**
+
+## Why not seedcord?
+
+Seedcord _can_ be a good option for your bot, but if you:
+
+- Are wanting to use **JavaScript** instead of **_TypeScript_**
+- **Don't need** _end-to-end_ type safety
+- **Don't care about using** _ComponentsV2_ for displaying information by default
+- Would rather use something a little **more _stable and mature_** (seedcord isn't 1.0 yet as of writing this!)
+- Want **_prefix (message) commands_** (which requires a privileged intent and is **not** supported out-of-the-box by Seedcord)
+
+Then Seedcord might not be for you. In that case, just close this tab and move on. **No need to cry over spilled milk!**
+
+## Prerequisites
+
+This tutorial will assume that you have:
+
+- Basic programming knowledge (any language is fine, even JavaScript)
+- Basic [TypeScript](https://typescriptlang.org) knowledge (namely: syntax, types, [generics](https://www.typescriptlang.org/docs/handbook/2/generics.html), and [decorators](https://www.typescriptlang.org/docs/handbook/decorators.html))
+- Knowledge of [discord.js](https://discord.js.org), or [another Discord framework/library](https://github.com/apacheli/discord-api-libs) (preferable, but not absolutely required for all cases)
+
+Still with me? **Great!** Let's get started, we'll be creating a bot from scratch in the next section. But first, let's see if you were paying attention with a quick quiz.
+
+## Knowledge Check
+
+<QuizIntro resetLabel="Start over">Let's test your knowledge. Your progress will be saved to local storage, and you can always reset and come back whenever you want! Try not to scroll back up until you're done with all the questions!</QuizIntro>
+
+<Quiz title="Question 1">
+    What is the **main problem** with most Discord frameworks that seedcord solves?
+
+    - [ ] They are not type-safe at all.
+      > That's wrong. Type safety is a big part of most frameworks.
+    - [ ] They are not easy to scale.
+      > While that can be true, it's not the main problem that seedcord solves.
+    - [x] They are not type-safe across boundaries.
+      > Other frameworks may not be perfectly type-safe across boundaries. Seedcord is type-safe across boundaries, meaning that if you mistype a route, it will throw at compile-time rather than at runtime.
+    - [ ] They don't work at all with TypeScript.
+      > TypeScript is a first-class citizen in most frameworks (since it's basically a superset of JavaScript), so this is not the main problem that seedcord solves.
+</Quiz>
+
+<Quiz title="Question 2">
+    Which of the following are reason(s) **not** to use seedcord? **Select all that apply.**
+
+    - [x] You want to use JavaScript instead of TypeScript.
+      > Seedcord is built with TypeScript in mind, and explicitly **does not** support JavaScript as it goes against the idea of the framework.
+    - [ ] You want to use ComponentsV2 for displaying information.
+      > **Incorrect.** Seedcord uses ComponentsV2, so this is actually a reason to use seedcord.
+    - [x] You want to use prefix (message) commands.
+      > Seedcord does not support prefix commands out-of-the-box, and they're generally discouraged by Discord due to the privileged intent required to use them anyway!
+    - [x] You want to use a more stable and mature framework.
+      > Seedcord is still in development and is not yet 1.0, so if you want a more stable and mature framework, seedcord might not be the best choice for you.
+</Quiz>
+
+<Quiz title="Question 3">
+    The seedcord framework was developed by [[materwelon]].
+</Quiz>
+
+<Quiz title="Question 4">
+    What kind of plugins are **officially** supported by seedcord?
+
+    - [x] Vite
+    - [ ] Webpack
+    - [ ] Rollup
+      > **Correction:** it can use Rollup plugins because Vite is built on top of Rolldown, which is (somewhat) Rollup-compatible, but it does not support Rollup plugins directly.
+    - [ ] Parcel
+    - [ ] Farm
+
+    The **seedcord** framework is built on top of [Vite](https://vite.dev/), so it supports Vite plugins. Other bundlers are not supported without rewriting the entire framework yourself.
+</Quiz>
+
+<Quiz title="Question 5">
+    What is the **official** stylized name of the seedcord framework?
+
+    - [ ] SeedCord
+    - [ ] SEEDCORD
+    - [x] seedcord
+    - [ ] Seedcord
+      > While I do type the name as "Seedcord" in this tutorial, the official stylized name is "seedcord" (all lowercase).
+
+    The **seedcord** framework is stylized as "seedcord" (all lowercase).
+</Quiz>
+
+<QuizResults resetLabel="Start over" />

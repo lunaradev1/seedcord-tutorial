@@ -1,0 +1,12 @@
+diff --git a/package.json b/package.json
+index 9f59c679131b41b3049913769754f25b3944bc9b..813abd1609ebc9ce4d78ca0cd080b1f618c88f73 100644
+--- a/package.json
++++ b/package.json
+@@ -31,6 +31,7 @@
+   "type": "module",
+   "exports": {
+     ".": "./index.ts",
++    "./libs/routeData": "./libs/routeData.ts",
+     "./middleware": "./middleware.ts",
+     "./overrides/MarkdownContent.astro": "./overrides/MarkdownContent.astro",
+     "./overrides/Sidebar.astro": "./overrides/Sidebar.astro",

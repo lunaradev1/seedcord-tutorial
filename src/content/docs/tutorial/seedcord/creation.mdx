@@ -1,0 +1,153 @@
+---
+title: Project Creation
+description: With the introduction and pleasantries out of the way, let's get started with creating your first seedcord project!
+embedDescription: "Learn how to create your first seedcord project and get started with the tutorial."
+route: /tutorial/seedcord/creation
+---
+
+import { Scrollycoding, Step } from 'starlight-codeblocks/components'
+import { FileExplorer, File, Folder } from 'starlight-file-explorer'
+import { Quiz, QuizIntro, QuizResults } from 'starlight-quiz/components'
+
+All right, let's get this started. The first step to any good project is to create the project itself.
+This is done by using the `create-seedcord` package. Just open a terminal and run the following command:
+
+```bash
+pnpm create seedcord@latest
+```
+
+This will download the `create-seedcord` package and run it immediately after. You will be prompted a few questions about your project.
+This tutorial will be using the following answers (outside of custom names):
+
+- Runner: Gateway
+- Intents: None
+- Install Dependencies: Yes
+- Initialize Git: No
+
+**Make sure you select yes for installing dependencies because seedcord doesn't fill out the dependencies for you unless you select yes, don't ask me why.**
+
+When that finishes, you can open the project in your IDE/code editor.
+Two good choices would be [VS Code](https://code.visualstudio.com/) or [WebStorm](https://www.jetbrains.com/webstorm/), but you can use whatever you want.
+**Just make sure it has (recent) TypeScript support.**
+
+## The Project Structure
+
+Now, let's take a look at the project structure. Click around this file explorer to see the files and folders in the project as well as what they do.
+
+<FileExplorer label="Project structure">
+    <Folder name="src">
+        The source code of your project.
+        <Folder name="commands">
+            Your command definitions go here. This is where you define the commands that your bot will have.
+
+            **Note:** This is not where you define the logic of your commands, that is done in the `handlers` folder.
+
+            <File name="Ping.ts">
+                This is a command definition file. It defines the command and its options, but not the logic of what happens when the command is executed. That is done in the `handlers` folder.
+            </File>
+        </Folder>
+        <Folder name="handlers" collapsed>
+            Your command logic goes here. This is where you define what happens when a command is executed.
+
+            **Note:** This is not where you define the command itself, that is done in the `commands` folder.
+
+            <File name="Ping.ts">
+                This is a command handler file. It defines the logic of what happens when the command is executed, but not the command itself. That is done in the `commands` folder.
+            </File>
+        </Folder>
+        <Folder name="plugins" collapsed>
+            This folder holds plugins, which are a way to add additional functionality to your bot without repeating code. You can create your own plugins to add functionality to your bot.
+            <File name="Uptime.ts">
+                This is just an example plugin, it only records when the bot started. You can create your own plugins to add functionality to your bot.
+            </File>
+        </Folder>
+        <File name="bot.ts">
+            The file where your bot is initialized and started. **This is the entry point of your bot.**
+        </File>
+        <File name="seedcord-gen.ts" icon="seti:lock">
+            This file is the meat of how end-to-end type safety is achieved in seedcord.
+            In this file is all the commands, plugins and other resources that the bot has explicitly declared.
+            **It is readonly by default in most editors and should not be edited by hand.**
+            You'll see how to regenerate this later.
+        </File>
+    </Folder>
+    <File name=".env" icon="seti:shell">
+        The environment variables file. This is where you put your bot token and other secrets.
+    </File>
+    <File name="eslint.config.ts" icon="seti:eslint">
+        The ESLint configuration, seedcord has its own plugin and config for ESLint that is used to lint your project.
+    </File>
+    <File name="package.json" icon="node">
+        The package.json file of your project. This is where your dependencies are listed.
+    </File>
+    <File name="prettier.config.ts" icon="setting">
+        The Prettier configuration file.
+    </File>
+    <File name="seedcord.config.ts" icon="discord">
+        The Seedcord configuration file, this is mainly where the CLI config is.
+    </File>
+</FileExplorer>
+
+Let's explore the code of a few of these files to see what they contain.
+We'll only cover a few files though, since not all of them are important here.
+Anything we don't cover here, you can always open later and explore on your own.
+I'm not stopping you.
+
+### seedcord.config.ts
+
+<Scrollycoding codeSide="left">
+
+```ts title="seedcord.config.ts" id="seedcord-config-with-false-tc"
+import { defineConfig } from 'seedcord';
+
+export default defineConfig({
+    root: './src',
+    instance: './bot.ts',
+    // set to false to hold the running arc and live dot still, which cuts idle redraws by ~80%
+    idleAnimation: true,
+    hmr: {
+        // set to true to run tsc --watch alongside the bot, at the cost of a second node process
+        typecheck: false
+    }
+});
+```
+
+<Step>Let's start with this file. It's for the seedcord CLI and configures how it runs.</Step>
+<Step focus="4">The `root` option specifies the root directory of your project. In this case, it's the `src` directory that you saw earlier.</Step>
+<Step focus="5">The `instance` option specifies the entry point of your bot, relative to the `root`. In this case, the path is `src/bot.ts`.</Step>
+<Step focus="6-7">The `idleAnimation` option specifies whether to animate the arc and live dot when the bot is idle (in the TUI, which we will cover in a minute). This is purely cosmetic, but it can be nice to have.</Step> {/* I swear to fuck, if some kid makes a 67 joke from this line, I will have a seizure in my room. */}
+<Step focus="8,11">The `hmr` option is for the HMR (Hot Module Replacement) configuration. We'll cover that in a bit when we run the bot for the first time!</Step>
+<Step focus="8-11" mark="10">The `typecheck` option in the HMR configuration if set to true, will start a new node process that runs `tsc --watch`.</Step>
+
+```ts title="seedcord.config.ts" id="seedcord-config-with-true-tc"
+import { defineConfig } from 'seedcord';
+
+export default defineConfig({
+    root: './src',
+    instance: './bot.ts',
+    // set to false to hold the running arc and live dot still, which cuts idle redraws by ~80%
+    idleAnimation: true,
+    hmr: {
+        // set to true to run tsc --watch alongside the bot, at the cost of a second node process
+        typecheck: true
+    }
+});
+```
+
+<Step focus="8-11" mark="10">This is really helpful for development, so let's set it to `true` for now!</Step>
+<Step>Altogether, this file gives you a way to run your bot via the CLI!</Step>
+</Scrollycoding>
+
+## Knowledge Check
+
+<QuizIntro resetLabel="Start over">Let's test your knowledge. Your progress will be saved to local storage, and you can always reset and come back whenever you want! Try not to scroll back up until you're done with all the questions!</QuizIntro>
+
+<Quiz title="Question 1">
+    Complete the following command for creating a new seedcord project: `pnpm [[create]] [[seedcord]]@latest`
+
+    ---
+
+    Using the command `pnpm create seedcord@latest` creates a new seedcord project by calling the `create-seedcord` package.
+</Quiz>
+
+<QuizResults resetLabel="Start over" />

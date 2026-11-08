@@ -1,0 +1,11 @@
+---
+import HeadingBadges from 'starlight-heading-badges/components/HeadingBadgesTableOfContents.astro'
+import QuizData from 'starlight-quiz/overrides/TableOfContents.astro'
+import StarlightCoolerCreditTableOfContents from 'starlight-cooler-credit/components/TableOfContents.astro'
+---
+
+<QuizData {...Astro.props}>
+    <HeadingBadges {...Astro.props} />
+    <slot />
+</QuizData>
+<StarlightCoolerCreditTableOfContents {...Astro.props} />

@@ -1,0 +1,22 @@
+@import '@fontsource-variable/ibm-plex-sans';
+@import '@fontsource-variable/jetbrains-mono';
+@import '@fontsource-variable/space-grotesk';
+
+@layer galaxy, starlight, overrides;
+
+@layer overrides {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--sl-font-display);
+  }
+}
+
+:root {
+  --sl-font: 'IBM Plex Sans', Arial, sans-serif;
+  --sl-font-mono: 'JetBrains Mono', monospace;
+  --sl-font-display: 'Space Grotesk', Arial, sans-serif;
+}
