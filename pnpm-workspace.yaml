@@ -1,25 +1,11 @@
 allowBuilds:
   esbuild: true
-  workerd: true
 catalog:
-  vite: npm:@voidzero-dev/vite-plus-core@1.4.0
-  vite-plus: 1.4.0
+  vite: npm:@voidzero-dev/vite-plus-core@1.5.0
+  vite-plus: 1.5.0
 ignoreWorkspaceRootCheck: true
-minimumReleaseAgeExclude:
-  - '@astrojs/cloudflare@14.4.4'
-  - '@cloudflare/workerd-darwin-64@1.20261102.1'
-  - '@cloudflare/workerd-darwin-arm64@1.20261102.1'
-  - '@cloudflare/workerd-linux-64@1.20261102.1'
-  - '@cloudflare/workerd-linux-arm64@1.20261102.1'
-  - '@cloudflare/workerd-windows-64@1.20261102.1'
-  - miniflare@5.20261102.0-beta
-  - workerd@1.20261102.1
-  - wrangler@4.156.2
 overrides:
   vite@*: 'catalog:'
-packages:
-  - .
-  - studio/
 patchedDependencies:
   starlight-cooler-credit: patches/starlight-cooler-credit.patch
   starlight-group-pages: patches/starlight-group-pages.patch

@@ -11,7 +11,6 @@
     "prepare": "vp config",
     "preview": "astro preview",
     "security": "socket scan create .",
-    "start": "vpr dev",
     "update": "taze"
   },
   "dependencies": {
